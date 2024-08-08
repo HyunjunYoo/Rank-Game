@@ -50,17 +50,16 @@ public class CommentService {
         return commentEntities.stream().map(CommentDTO::fromEntity).collect(Collectors.toList());
     }
 
-    public void updateComment(Long commentId, Long memberId, String content) {
-        int updatedCount = commentRepository.updateComment(commentId, content, LocalDateTime.now(), memberId);
-        if (updatedCount == 0) {
-            throw new IllegalArgumentException("Comment not found or not authorized to update.");
-        }
+    public void updateComment(Long id, String content) {
+        CommentEntity comment = commentRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid comment Id:" + id));
+        comment.setContent(content);
+        comment.setUpdatedAt(LocalDateTime.now());
+        commentRepository.save(comment);
     }
 
-    public void deleteComment(Long commentId, Long memberId) {
-        int deletedCount = commentRepository.deleteComment(commentId, memberId);
-        if (deletedCount == 0) {
-            throw new IllegalArgumentException("Comment not found or not authorized to delete.");
-        }
+    // 댓글 삭제
+    public void deleteComment(Long id) {
+        commentRepository.deleteById(id);
     }
 }

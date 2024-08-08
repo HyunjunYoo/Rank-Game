@@ -1,5 +1,6 @@
 package rank.game.service;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -9,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import rank.game.dto.BoardDTO;
 import rank.game.entity.BoardEntity;
 import rank.game.repository.BoardRepository;
+import rank.game.repository.CommentRepository;
 
 import java.io.File;
 import java.util.List;
@@ -19,6 +21,8 @@ public class BoardService {
 
     @Autowired // Autowired를 사용하면 BoardApplication의 @Bean이 자동적으로 읽어준다.
     private BoardRepository boardRepository;
+    @Autowired
+    private CommentRepository commentRepository;
 
     // 게시글 저장
     public void boardWrite(BoardEntity board, MultipartFile file) throws Exception {
@@ -52,7 +56,11 @@ public class BoardService {
     }
 
     // 특정 게시글 삭제
+    @Transactional
     public void boardDelete(Long id) {
+        // 먼저 댓글 삭제
+        commentRepository.deleteByBoardId(id);
+        // 그 다음 보드 삭제
         boardRepository.deleteById(id);
     }
 
@@ -77,5 +85,12 @@ public class BoardService {
     public BoardEntity getNextPost(Long id) {
         List<BoardEntity> posts = boardRepository.findNextPosts(id, PageRequest.of(0, 1));
         return posts.isEmpty() ? null : posts.get(0);
+    }
+
+    // 조회수 증가 서비스 메서드
+    public void incrementViewCount(Long id) {
+        BoardEntity board = boardRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid board ID"));
+        board.setViewCount(board.getViewCount() + 1);
+        boardRepository.save(board);
     }
 }

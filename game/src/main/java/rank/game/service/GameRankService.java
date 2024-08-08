@@ -2,12 +2,10 @@ package rank.game.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import rank.game.dto.GameHistoryDTO;
 import rank.game.entity.Game;
 import rank.game.entity.GameHistory;
 import rank.game.repository.GameHistoryRepository;
 import rank.game.repository.GameRepository;
-import rank.game.repository.mybatis.GameRankMapper;
 
 import java.time.LocalDateTime;
 import java.util.List;

@@ -1,5 +1,6 @@
 package rank.game.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -75,6 +76,7 @@ public class BoardController {
         // 로그인 세션 추가
         boolean isLogin = session.getAttribute("loginEmail") != null;
 
+
         // 로그인 성공 시
         if(session.getAttribute("loginEmail") != null) {
             model.addAttribute("isLogin", isLogin);
@@ -139,6 +141,13 @@ public class BoardController {
         BoardEntity previousPost = boardService.getPreviousPost(id);
         BoardEntity nextPost = boardService.getNextPost(id);
 
+        // 조회수 증가 로직
+        String sessionKey = "viewed_board_" + id;
+        if (session.getAttribute(sessionKey) == null) {
+            boardService.incrementViewCount(id);
+            session.setAttribute(sessionKey, true);
+        }
+
         // 특정 게시글 가져오기
         model.addAttribute("board", board);
         model.addAttribute("createdAt", board.getCreatedAt());
@@ -146,6 +155,7 @@ public class BoardController {
         model.addAttribute("memberNum", memberNum);
         model.addAttribute("searchKeyword", searchKeyword);
         model.addAttribute("page", page);
+
 
         // 이전글과 다음글 정보 추가
         model.addAttribute("previousPost", previousPost);

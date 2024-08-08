@@ -41,10 +41,17 @@ public class BoardEntity {
     private String filepath;
 
     @Column(name = "view_count")
-    private int viewCount;
+    private int viewCount=0;
 
     @Column(name = "deleted", nullable = false)
     private boolean deleted = false;  // 논리 삭제를 위한 필드
+
+    @Column(name = "like_count")
+    private Integer likeCount = 0;
+
+    @Column(name = "dislike_count")
+    private Integer dislikeCount = 0;
+
 
     @PrePersist
     protected void onCreate() {
@@ -66,7 +73,9 @@ public class BoardEntity {
         boardEntity.setCreatedAt(LocalDateTime.now());
         boardEntity.setUpdatedAt(LocalDateTime.now());
         boardEntity.setViewCount(boardDTO.getViewCount());
-        boardEntity.setDeleted(boardDTO.isDeleted());  // deleted 필드 추가
+        boardEntity.setDeleted(boardDTO.isDeleted());  // deleted 필드 추가+
+        boardEntity.setLikeCount(boardDTO.getLikeCount());
+        boardEntity.setDislikeCount(boardDTO.getDislikeCount());
         return boardEntity;
     }
 }

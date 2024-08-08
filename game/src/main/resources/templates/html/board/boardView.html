@@ -126,7 +126,8 @@
 			<div class="boardView-info1">
 				👤<span class="boardView-nickname" th:text="${board.nickname}">닉네임</span>&nbsp;
 				🕘<span class="boardView-date" th:text="${#temporals.format(board.createdAt, 'MM.dd')}"></span>&nbsp;
-				👀<span class="boardView-viewCount" th:text="${board.viewCount}">0</span>
+				👀<span class="boardView-viewCount" th:text="${board.viewCount}">0</span>&nbsp;
+				❤<span th:text="${board.likeCount}" class="boardView-likeCount"> 0</span>
 			</div>
 			<div class="boardView-menu-wrapper">
 				<input type="checkbox" id="menu-toggle">
@@ -134,9 +135,9 @@
 				<div class="boardView-menu-content">
 					<ul>
 						<li><a th:href="@{/board/modify/{id}(id=${board.id}, searchKeyword=${searchKeyword}, page=${page})}">✏️수정</a></li>
-						<li><a th:href="@{/board/delete/{id}(id=${board.id}, searchKeyword=${searchKeyword}, page=${page})}">🗑️삭제</a></li>
-						<li><a href="#">🚨신고</a></li>
-						<li><a href="#">🚫차단</a></li>
+						<li><a href="#" class="delete-btn" th:data-id="${board.id}" th:data-search-keyword="${searchKeyword}" th:data-page="${page}">🗑️삭제</a></li>
+<!--						<li><a href="#">🚨신고</a></li>-->
+<!--						<li><a href="#">🚫차단</a></li>-->
 					</ul>
 				</div>
 			</div>
@@ -148,15 +149,16 @@
 		</div>
 
 		<div class="boardView-footer">
-			<button id="likeButton" class="likeButton">
+			<button id="likeBtn" class="likeButton" th:data-id="${board.id}">
 				<span>좋아요</span>
 				<span>👍</span>
 			</button>
-			<button id="dislikeButton" class="likeButton">
+			<button id="dislikeBtn" class="likeButton" th:data-id="${board.id}">
 				<span>싫어요</span>
 				<span>👎</span>
 			</button>
 		</div>
+
 		<hr class="boardView-separator1">
 
 		<div class="boardView-post-navigation">
@@ -186,7 +188,7 @@
 		<div class="comment-title">댓글</div>
 		<div class="comment-section">
 			<ul id="commentList" class="comment-list">
-					<!-- 댓글 목록을 동적으로 추가할 부분 -->
+				<!-- 댓글 목록을 동적으로 추가할 부분 -->
 			</ul>
 			<div id="commentStatus" class="comment-status"></div>
 		</div>
@@ -195,11 +197,10 @@
 			<form id="commentForm" class="comment-form">
 				<input type="hidden" id="boardId" name="boardId" th:value="${board.id}" readonly>
 				<input type="hidden" id="memberNum" name="memberNum" th:value="${memberNum}" readonly>
-				<input name="content" id="content" class="comment-textarea" placeholder="댓글을 입력하세요">
+				<input name="content" id="content" class="comment-textarea" placeholder="댓글을 입력하세요" required>
 				<button type="submit" class="comment-submit-button">댓글 작성</button>
 			</form>
 		</div>
-
 	</div>
 </section>
 
@@ -244,8 +245,10 @@
 <script src="/js/jquery.sticky-sidebar.min.js"></script>
 <script src="/js/jquery.magnific-popup.min.js"></script>
 <script src="/js/main.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
 <script>
-	$(document).ready(function (){
+	$(document).ready(function() {
+		const memberNum = $("#memberNum").val();
 		const boardId = $("#boardId").val();
 
 		// 댓글 리스트 초기화
@@ -253,16 +256,112 @@
 			$.ajax({
 				type: "GET",
 				url: "/comments/board/" + boardId,
-				success: function (response) {
+				success: function(response) {
 					$("#commentList").empty();
-					response.forEach(function (comment) {
-						$("#commentList").append(
-								"<li><div class='comment-nickname'><strong>" + comment.nickname + "</strong> <em>(" + comment.createdAt + ")</em></div>" +
-								"<div class='comment-content'>" + comment.content + "</div></li>" +
-								"<button onclick=\"showEditForm(${comment.id})\">수정</button>\n" +
-								"<button onclick=\"deleteComment(${comment.id})\">삭제</button>" +
-								"<hr class='boardView-separator'>"
-						);
+					response.forEach(function(comment) {
+						// 날짜 포맷팅
+						const createdAt = new Date(comment.createdAt);
+						const formattedDate = createdAt.toLocaleDateString('ko-KR', {
+							day: '2-digit',
+							month: '2-digit'
+						}).replace(/\//g, '.'); // 슬래시를 점으로 변환
+
+						let commentHtml =
+								"<li data-id='" + comment.id + "'>" +
+								"<div class='comment-header'>" +
+								"<div class='comment-nickname'><strong>👤 " + comment.nickname + "</strong>&nbsp; <em>🕘 " + formattedDate + "</em></div>";
+
+						if (comment.memberNum == memberNum) {
+							commentHtml +=
+									"<button class='comment-menu-btn'>⋮</button>" +
+									"<div class='comment-menu-options' style='display: none;'>" +
+									"<button class='comment-edit-btn'>✏수정</button>" +
+									"<button class='comment-delete-btn'>🗑삭제</button>" +
+									"</div>";
+						}
+
+						commentHtml += "</div>" +
+								"<div class='comment-content'>" + comment.content + "</div>" +
+								"<div class='comment-edit-form' style='display: none;'>" +
+								"<textarea class='comment-edit-text'>" + comment.content + "</textarea>" +
+								"<button class='comment-save-btn'>저장</button>" +
+								"<button class='comment-cancel-btn'>취소</button>" +
+								"</div>" +
+								"<hr class='comment-boardView-separator'></li>";
+
+						$("#commentList").append(commentHtml);
+					});
+
+					// 메뉴 버튼 클릭 이벤트
+					$('.comment-menu-btn').click(function() {
+						const comment = $(this).closest('li');
+						comment.find('.comment-menu-options').toggle();
+					});
+
+					// 수정 버튼 클릭 이벤트
+					$('.comment-edit-btn').click(function() {
+						const comment = $(this).closest('li');
+						comment.find('.comment-edit-form').show();
+						comment.find('.comment-content').hide();
+						comment.find('.comment-menu-options').hide();
+					});
+
+					// 취소 버튼 클릭 이벤트
+					$('.comment-cancel-btn').click(function() {
+						const comment = $(this).closest('li');
+						comment.find('.comment-edit-form').hide();
+						comment.find('.comment-content').show();
+					});
+
+					// 저장 버튼 클릭 이벤트
+					$('.comment-save-btn').click(function() {
+						const comment = $(this).closest('li');
+						const newText = comment.find('.comment-edit-text').val();
+						const commentId = comment.data('id');
+
+						$.ajax({
+							type: "PUT",
+							url: "/comments/" + commentId,
+							contentType: "application/json",
+							data: JSON.stringify({ content: newText }),
+							success: function(response) {
+								comment.find('.comment-content').text(newText);
+								comment.find('.comment-edit-form').hide();
+								comment.find('.comment-content').show();
+							},
+							error: function(xhr, status, error) {
+								if (xhr.status === 401) {
+									alert("로그인이 필요합니다.");
+									window.location.href = '/login'; // 예시
+								} else {
+									console.error("댓글 수정 중 오류가 발생했습니다.");
+								}
+							}
+						});
+					});
+
+					// 삭제 버튼 클릭 이벤트
+					$('.comment-delete-btn').click(function() {
+						const commentId = $(this).closest('li').data('id');
+
+						if (confirm("정말로 이 댓글을 삭제하시겠습니까?")) {
+							$.ajax({
+								type: "DELETE",
+								url: "/comments/" + commentId,
+								success: function(response) {
+									alert(response.message);
+									loadComments(); // 댓글 목록 새로고침
+								},
+								error: function(xhr, status, error) {
+									if (xhr.status === 401) {
+										alert("로그인이 필요합니다.");
+										window.location.href = '/login'; // 예시
+									} else {
+										console.error("댓글 삭제 중 오류가 발생했습니다.");
+									}
+								}
+							});
+						}
 					});
 				},
 				error: function(xhr, status, error) {
@@ -276,10 +375,16 @@
 
 		// 댓글 처리 함수
 		$("#commentForm").submit(function(event) {
+			if (!memberNum) {
+				alert("로그인 후 댓글을 작성할 수 있습니다.");
+				event.preventDefault();
+				return false;
+			}
+
 			event.preventDefault();
 			const formData = {
 				boardId: $("#boardId").val(),
-				memberNum: $("#memberNum").val(),
+				memberNum: memberNum,
 				content: $("#content").val()
 			};
 
@@ -297,46 +402,55 @@
 					$("#commentStatus").html("<p>오류: " + xhr.responseText + "</p>");
 				}
 			});
+		})
+
+		// 삭제 버튼 클릭 이벤트
+		$(".delete-btn").click(function(event) {
+			event.preventDefault(); // 기본 링크 동작 방지
+
+			const button = $(this);
+			const boardId = button.data("id");
+			const searchKeyword = button.data("search-keyword");
+			const page = button.data("page");
+
+			// 확인 대화상자 표시
+			if (confirm("정말 이 글을 삭제하시겠습니까?")) {
+				// 사용자가 확인을 클릭하면 삭제 요청을 보냄
+				const deleteUrl = `/board/delete/${boardId}?searchKeyword=${searchKeyword}&page=${page}`;
+				window.location.href = deleteUrl;
+			}
 		});
 
-		// 댓글 수정 폼 표시
-		window.showEditForm = function(id) {
-			$(`#edit-form-${id}`).toggle();
-		};
-
-		// 댓글 수정 저장
-		window.saveEdit = function(id) {
-			const content = $(`#edit-content-${id}`).val();
-
+		// 좋아요 싫어요 버튼
+		$('#likeBtn').click(function() {
+			var boardId = $(this).data('id');  // th:data-id에서 가져온 board.id 값
 			$.ajax({
-				type: "PUT",
-				url: `/comments/${id}`,
-				contentType: "application/json",
-				data: JSON.stringify({ content: content }),
+				type: 'POST',
+				url: '/board/like/' + boardId,
 				success: function(response) {
-					$("#commentStatus").html("<p>" + response.message + "</p>");
-					loadComments();
+					alert(response);  // 성공 시 서버의 응답 메시지를 알림창으로 표시
+					// 좋아요 성공 후 페이지의 UI를 업데이트하는 로직 추가 가능
 				},
-				error: function(xhr, status, error) {
-					$("#commentStatus").html("<p>오류: " + xhr.responseText + "</p>");
+				error: function(xhr) {
+					alert(xhr.responseText);  // 오류 시 서버의 응답 메시지를 알림창으로 표시
 				}
 			});
-		};
+		});
 
-		// 댓글 삭제
-		window.deleteComment = function(id) {
+		$('#dislikeBtn').click(function() {
+			var boardId = $(this).data('id');  // th:data-id에서 가져온 board.id 값
 			$.ajax({
-				type: "DELETE",
-				url: `/comments/${id}`,
+				type: 'POST',
+				url: '/board/dislike/' + boardId,
 				success: function(response) {
-					$("#commentStatus").html("<p>" + response.message + "</p>");
-					loadComments();
+					alert(response);  // 성공 시 서버의 응답 메시지를 알림창으로 표시
+					// 싫어요 성공 후 페이지의 UI를 업데이트하는 로직 추가 가능
 				},
-				error: function(xhr, status, error) {
-					$("#commentStatus").html("<p>오류: " + xhr.responseText + "</p>");
+				error: function(xhr) {
+					alert(xhr.responseText);  // 오류 시 서버의 응답 메시지를 알림창으로 표시
 				}
 			});
-		};
+		});
 	});
 </script>
 	</body>

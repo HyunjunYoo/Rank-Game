@@ -3600,194 +3600,103 @@ ol {
 	color: #081624;
 }
 
+.comment-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	position: relative; /* 부모 요소를 기준으로 자식 요소의 위치를 지정 */
+}
+
+.comment-menu-btn {
+	background: none;
+	border: none;
+	font-size: 18px;
+	cursor: pointer;
+	color: #FFFFFF;
+}
+
+.comment-menu-options {
+	display: none;
+	position: absolute;
+	background-color: white;
+	border: 1px solid #ccc;
+	padding: 5px;
+	z-index: 1000;
+	right: 0; /* 오른쪽 끝에 배치 */
+	top: 30px;
+}
+
+.comment-menu-options button {
+	display: block;
+	width: 100%;
+	background: none;
+	border: none;
+	cursor: pointer;
+	padding: 5px;
+	text-align: left;
+}
+
+.comment-edit-form {
+	display: none;
+}
+
+.comment-boardView-separator {
+	border: none; /* 기본 경계 제거 */
+	height: 1px; /* 두께 설정 */
+	background-color: #858585; /* 배경색을 흰색으로 설정 */
+	margin: 10px 0; /* 상하 여백 설정 (제목과 내용 사이의 공간) */
+}
+
+/* 댓글 수정 텍스트 영역 */
+.comment-edit-form {
+	display: flex;
+	align-items: center; /* 수직 정렬 */
+	gap: 10px; /* 요소들 사이의 간격 */
+	margin-bottom: 10px;
+}
+
+.comment-edit-text {
+	flex: 1; /* 가능한 모든 공간을 차지 */
+	font-size: 14px;
+	font-weight: normal;
+	color: #333;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	background-color: #f9f9f9;
+	padding: 10px;
+	box-sizing: border-box;
+	resize: none; /* 텍스트 영역 크기 조절 비활성화 */
+	height: 63px; /* 고정 높이 설정 */
+}
+
+.comment-save-btn, .comment-cancel-btn {
+	font-size: 14px;
+	font-weight: bold;
+	padding: 10px 20px;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	color: #fff; /* 버튼 텍스트 색상 */
+}
+
+.comment-save-btn {
+	background-color: #6f42c1; /* 보라색 배경 */
+}
+
+.comment-save-btn:hover {
+	background-color: #5a2a91; /* 더 어두운 보라색으로 호버 */
+}
+
+.comment-cancel-btn {
+	background-color: #a74d8e; /* 연보라색 배경 */
+}
+
+.comment-cancel-btn:hover {
+	background-color: #8e1d62; /* 더 어두운 연보라색으로 호버 */
+}
 
 
 
-
-
-/*.comment-submit-button {*/
-/*	flex-shrink: 0; !* 버튼 크기가 줄어들지 않도록 함 *!*/
-/*	!*width: 20%; !* 부모 컨테이너의 20% 너비 *!*!*/
-/*	padding: 10px 20px; !* 버튼 내부 여백 설정 *!*/
-/*	font-size: 16px; !* 글꼴 크기 설정 *!*/
-/*	border: none; !* 기본 테두리 제거 *!*/
-/*	border-radius: 4px; !* 모서리 둥글게 설정 *!*/
-/*	background-color: #007bff; !* 버튼 배경색 설정 *!*/
-/*	color: #fff; !* 버튼 텍스트 색상 설정 *!*/
-/*	cursor: pointer; !* 마우스 포인터를 손 모양으로 변경 *!*/
-/*	transition: background-color 0.3s ease; !* 배경색 변화에 애니메이션 효과 추가 *!*/
-/*}*/
-
-/*.comment-submit-button:hover {*/
-/*	background-color: #0056b3; !* 마우스를 올렸을 때 배경색 변경 *!*/
-/*}*/
-
-
-
-
-
-
-
-
-
-/*.comment-section {*/
-/*	margin-top: 40px;*/
-/*	flex-direction: column;*/
-/*	align-items: center;*/
-/*	width: 60%;*/
-/*	margin: 0 auto;*/
-/*}*/
-
-/*.comment-list {*/
-/*	list-style: none;*/
-/*	padding: 0;*/
-/*	margin: 0;*/
-/*}*/
-
-/*.comment-list li {*/
-/*	background: #3d1753;*/
-/*	padding: 10px;*/
-/*	border-radius: 5px;*/
-/*	margin-bottom: 10px;*/
-/*}*/
-
-/*.comment-status {*/
-/*	font-size: 14px;*/
-/*	color: #E0E0E0;*/
-/*	margin-top: 10px;*/
-/*}*/
-
-/* 댓글 작성 폼 */
-/*.comment-form-container {*/
-/*	margin-top: 20px;*/
-/*	flex-direction: column;*/
-/*	align-items: center;*/
-/*	width: 60%;*/
-/*	margin: 0 auto;*/
-/*}*/
-
-/*.comment-form {*/
-/*	display: flex;*/
-/*	flex-direction: column;*/
-/*	gap: 10px;*/
-/*}*/
-/*.comment-form-container {*/
-/*	background: #36005AFF;*/
-/*}*/
-/*.comment-textarea {*/
-/*	width: 100%;*/
-/*	height: 100px;*/
-/*	padding: 10px;*/
-/*	border: 1px solid #4a2d6e;*/
-/*	border-radius: 5px;*/
-/*	background: #36005AFF;*/
-/*	color: #FFFFFF;*/
-/*	font-size: 16px;*/
-/*	resize: none;*/
-/*}*/
-/*	width: 100%;*/
-/*	height: 300px;*/
-/*	background-color: #653D7D;*/
-/*	color: #FFFFFF;*/
-/*	padding: 10px;*/
-/*	box-sizing: border-box;*/
-/*	margin-bottom: 20px;*/
-/*	resize: none;*/
-/*}*/
-
-/*.comment-submit-button {*/
-/*	background: #4a2d6e;*/
-/*	color: #FFFFFF;*/
-/*	border: none;*/
-/*	padding: 10px 20px;*/
-/*	font-size: 16px;*/
-/*	cursor: pointer;*/
-/*	border-radius: 5px;*/
-/*}*/
-
-/*.comment-submit-button:hover {*/
-/*	background: #5a3d6e;*/
-/*}*/
-
-/* boardView-section 내에서만 스타일 초기화 적용 */
-/*.boardView-section input,*/
-/*.boardView-section textarea,*/
-/*.boardView-section button {*/
-/*	margin: 0;*/
-/*	padding: 0;*/
-/*	border: none;*/
-/*	background: none;*/
-/*	font: inherit;*/
-/*	color: #FFFFFF;*/
-/*	appearance: none;*/
-/*	-webkit-appearance: none;*/
-/*	-moz-appearance: none;*/
-/*	box-shadow: none;*/
-/*	outline: none;*/
-/*}*/
-
-/*!* 게시글 제목 및 정보 *!*/
-/*.boardView-header {*/
-/*	margin-bottom: 20px;*/
-/*}*/
-
-
-/*.boardView-info {*/
-/*	display: flex;*/
-/*	justify-content: space-between;*/
-/*	color: #E0E0E0;*/
-/*	font-size: 14px;*/
-/*}*/
-
-
-
-
-
-
-
-
-/*.boardView-post-buttons {*/
-/*	margin-bottom: 20px;*/
-/*}*/
-
-/*.boardView-post-buttons button {*/
-/*	background-color: #4a2d6e;*/
-/*	color: #FFFFFF;*/
-/*	border: none;*/
-/*	padding: 10px 20px;*/
-/*	font-size: 16px;*/
-/*	cursor: pointer;*/
-/*	border-radius: 5px;*/
-/*	margin: 0 5px;*/
-/*}*/
-
-/*.boardView-post-buttons button:hover {*/
-/*	background-color: #5a3d6e;*/
-/*}*/
-
-/*.boardView-post-navigation {*/
-/*	display: flex;*/
-/*	gap: 10px;*/
-/*}*/
-
-/*.navigation-form {*/
-/*	display: inline;*/
-/*}*/
-
-/*.navigation-form button {*/
-/*	background-color: #4a2d6e;*/
-/*	color: #FFFFFF;*/
-/*	border: none;*/
-/*	padding: 10px 20px;*/
-/*	font-size: 16px;*/
-/*	cursor: pointer;*/
-/*	border-radius: 5px;*/
-/*	margin: 0 5px;*/
-/*}*/
-
-/*.navigation-form button:hover {*/
-/*	background-color: #5a3d6e;*/
-/*}*/
 
 
 

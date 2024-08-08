@@ -23,6 +23,9 @@ public class BoardDTO {
     private String filepath;
     private int viewCount;
     private boolean deleted = false;  // 논리 삭제를 위한 필드
+    private int likeCount;
+    private int dislikeCount;
+    private int commentCount;
 
     public static BoardDTO fromEntity(BoardEntity boardEntity) {
         BoardDTO boardDTO = new BoardDTO();
@@ -37,6 +40,8 @@ public class BoardDTO {
         boardDTO.setCreatedAt(boardEntity.getCreatedAt());
         boardDTO.setUpdatedAt(boardEntity.getUpdatedAt());
         boardDTO.setDeleted(boardEntity.isDeleted());
+        boardDTO.setLikeCount(boardEntity.getLikeCount());
+        boardDTO.setDislikeCount(boardEntity.getDislikeCount());
         return boardDTO;
     }
 }

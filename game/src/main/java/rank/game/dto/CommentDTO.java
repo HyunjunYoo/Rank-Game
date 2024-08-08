@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 
 @Data
 public class CommentDTO {
+    private Long id;
     private Long boardId;
     private Long memberNum;
     private String nickname;
@@ -16,6 +17,7 @@ public class CommentDTO {
 
     public static CommentDTO fromEntity(CommentEntity commentEntity) {
         CommentDTO commentDTO = new CommentDTO();
+        commentDTO.setId(commentEntity.getId());
         commentDTO.setContent(commentEntity.getContent());
         commentDTO.setCreatedAt(commentEntity.getCreatedAt());
         commentDTO.setBoardId(commentEntity.getBoard().getId());

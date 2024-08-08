@@ -120,7 +120,7 @@
 	<!-- boardList section -->
 	<section class="boardList-section">
 		<div class="boardList-info">
-			<h2><a href="/board">자유게시판</a></h2>
+<!--			<h2><a href="/board">자유게시판</a></h2>-->
 			<hr class="boardView-separator1">
 		</div>
 
@@ -135,7 +135,8 @@
 									<p class="boardList-meta">
 										👤<span th:text="${board.nickname}" class="boardList-nickname"></span>&nbsp;
 										🕘<span th:text="${#temporals.format(board.createdAt, 'MM.dd')}" class="boardList-date"></span>&nbsp;
-										👁‍🗨<span th:text="${board.viewCount}" class="boardList-viewCount">0</span>
+										👁‍🗨<span th:text="${board.viewCount}" class="boardList-viewCount">0</span>&nbsp;
+										❤<span th:text="${board.likeCount}" class="boardView-likeCount">0</span>
 									</p>
 								</div>
 							</a>

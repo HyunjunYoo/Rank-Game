@@ -28,14 +28,4 @@
         WHERE c.board_id = #{boardId}
     </select>
 
-    <update id="updateComment">
-        UPDATE comment
-        SET content = #{content}, updated_at = #{updatedAt}
-        WHERE id = #{id} AND member_id = #{memberId}
-    </update>
-
-    <delete id="deleteComment">
-        DELETE FROM comment
-        WHERE id = #{id} AND member_id = #{memberId}
-    </delete>
 </mapper>

@@ -21,6 +21,7 @@ public class CommentController {
     @Autowired
     private CommentService commentService;
 
+    // 댓글 추가 기능
     @PostMapping
     public ResponseEntity<Map<String, String>> addComment(@RequestBody CommentDTO commentDTO, HttpSession session) {
         Map<String, String> response = new HashMap<>();
@@ -28,6 +29,7 @@ public class CommentController {
         // 로그인 세션 확인
         if (session.getAttribute("loginEmail") == null) {
             response.put("message", "로그인이 필요합니다.");
+
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
         }
 
@@ -39,53 +41,59 @@ public class CommentController {
 
         // 댓글 추가
         commentService.addComment(commentDTO);
-        response.put("message", "댓글이 성공적으로 추가되었습니다.");
+        response.put("message", "");
         return ResponseEntity.ok(response);
     }
 
+    // 댓글 가져오기 기능
     @GetMapping("/board/{boardId}")
     public ResponseEntity<List<CommentDTO>> getCommentsByBoardId(@PathVariable Long boardId) {
         List<CommentDTO> comments = commentService.getCommentsByBoardId(boardId);
+        System.out.println(comments);
         return ResponseEntity.ok(comments);
     }
 
-    @PutMapping("/{commentId}")
-    public ResponseEntity<Map<String, String>> updateComment(@PathVariable Long commentId, @RequestBody CommentDTO commentDTO, HttpSession session) {
+    // 댓글 수정 기능
+    @PutMapping("/{id}")
+    public ResponseEntity<Map<String, String>> updateComment(@PathVariable Long id, @RequestBody Map<String, String> request, HttpSession session) {
         Map<String, String> response = new HashMap<>();
-        Long memberId = (Long) session.getAttribute("memberId");
 
-        if (memberId == null) {
-            response.put("message", "로그인이 필요합니다.");
+        // 로그인 세션 확인
+        if (session.getAttribute("loginEmail") == null) {
+            response.put("message", "");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
         }
 
-        try {
-            commentService.updateComment(commentId, memberId, commentDTO.getContent());
-            response.put("message", "댓글이 성공적으로 수정되었습니다.");
-            return ResponseEntity.ok(response);
-        } catch (IllegalArgumentException e) {
-            response.put("message", e.getMessage());
+        // 댓글 내용 검증
+        String content = request.get("content");
+        if (content == null || content.trim().isEmpty()) {
+            response.put("message", "");
             return ResponseEntity.badRequest().body(response);
         }
+
+        // 댓글 수정
+        commentService.updateComment(id, content);
+        response.put("message", "");
+        return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping("/{commentId}")
-    public ResponseEntity<Map<String, String>> deleteComment(@PathVariable Long commentId, HttpSession session) {
+    // 댓글 삭제
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Map<String, String>> deleteComment(@PathVariable Long id, HttpSession session) {
         Map<String, String> response = new HashMap<>();
-        Long memberId = (Long) session.getAttribute("memberId");
 
-        if (memberId == null) {
+        if (session.getAttribute("loginEmail") == null) {
             response.put("message", "로그인이 필요합니다.");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
         }
 
         try {
-            commentService.deleteComment(commentId, memberId);
-            response.put("message", "댓글이 성공적으로 삭제되었습니다.");
+            commentService.deleteComment(id);
+            response.put("message", "댓글이 삭제되었습니다.");
             return ResponseEntity.ok(response);
-        } catch (IllegalArgumentException e) {
-            response.put("message", e.getMessage());
-            return ResponseEntity.badRequest().body(response);
+        } catch (Exception e) {
+            response.put("message", "댓글 삭제 중 오류가 발생했습니다.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
 }
