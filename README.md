@@ -45,9 +45,9 @@
 ![API](https://github.com/user-attachments/assets/43509bbb-5c69-4d3a-a625-a5b7cf7932e7)
 
 
-### 6. 마이페이지(내가 쓴 게시글, 내가 투표한 기록, 프로필 등록, 닉네임/비밀번호 변경)
+### 6. 게시글 페이징 처리(내가 쓴 게시글, 내가 투표한 기록, 프로필 등록, 닉네임/비밀번호 변경)
 
-![myPage](https://github.com/user-attachments/assets/24286963-47db-4b83-9573-75cae2a5a5d5)
+![KakaoTalk_20240814_014011918](https://github.com/user-attachments/assets/8887e86c-ee14-4b94-b6b6-7fd6ec27b27d)
 
 
 
