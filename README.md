@@ -23,26 +23,29 @@
 
 ## 구현 기능 미리보기
 
-### 1. 회원가입
+### 1. 배틀그라운드 API
 
-### 2. 로그인
-
-![login](https://github.com/user-attachments/assets/31beb31f-a485-41b7-9589-90597f1ab837)
+![KakaoTalk_20240814_014011918_05](https://github.com/user-attachments/assets/eab84b66-75f5-44ee-a1bc-332da65ba975)
 
 
-### 3. 게임 투표
+### 2. 인기게임 랭킹 그래프
 
-![gameVote](https://github.com/user-attachments/assets/368af512-f8dc-44ea-a63e-ee6eccfca8ef)
-
-
-### 4. 게임 순위 시각화(그래프)
-
-![gameRank](https://github.com/user-attachments/assets/003b4a81-2e07-4372-8edc-3609ced004eb)
+![KakaoTalk_20240814_014011918_04](https://github.com/user-attachments/assets/1412c966-eb42-4a35-84dd-341f4c670c88)
 
 
-### 5. 인기 게임 API 연동(사용자조회, 전적조회)
+### 3. 게시판 리스트 및 상세보기
 
-![API](https://github.com/user-attachments/assets/43509bbb-5c69-4d3a-a625-a5b7cf7932e7)
+![KakaoTalk_20240814_014011918_03](https://github.com/user-attachments/assets/b321a389-199e-474b-989d-252d52e00d54)
+
+
+### 4. 게시글 작성(그래프)
+
+![KakaoTalk_20240814_014011918_02](https://github.com/user-attachments/assets/49a06a30-173a-4344-83a2-c3280a75a9b8)
+
+
+### 5. 게시글 삭제(사용자조회, 전적조회)
+
+![KakaoTalk_20240814_014011918_01](https://github.com/user-attachments/assets/c408fd97-a471-4ef2-9d50-fcaf43d973fa)
 
 
 ### 6. 게시글 페이징 처리(내가 쓴 게시글, 내가 투표한 기록, 프로필 등록, 닉네임/비밀번호 변경)
