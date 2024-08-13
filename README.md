@@ -38,17 +38,17 @@
 ![KakaoTalk_20240814_014011918_03](https://github.com/user-attachments/assets/b321a389-199e-474b-989d-252d52e00d54)
 
 
-### 4. 게시글 작성(그래프)
+### 4. 게시글 작성
 
 ![KakaoTalk_20240814_014011918_02](https://github.com/user-attachments/assets/49a06a30-173a-4344-83a2-c3280a75a9b8)
 
 
-### 5. 게시글 삭제(사용자조회, 전적조회)
+### 5. 게시글 삭제
 
 ![KakaoTalk_20240814_014011918_01](https://github.com/user-attachments/assets/c408fd97-a471-4ef2-9d50-fcaf43d973fa)
 
 
-### 6. 게시글 페이징 처리(내가 쓴 게시글, 내가 투표한 기록, 프로필 등록, 닉네임/비밀번호 변경)
+### 6. 게시글 검색 처리
 
 ![KakaoTalk_20240814_014011918](https://github.com/user-attachments/assets/8887e86c-ee14-4b94-b6b6-7fd6ec27b27d)
 
