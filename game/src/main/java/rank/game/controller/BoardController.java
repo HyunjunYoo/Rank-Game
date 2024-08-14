@@ -1,7 +1,8 @@
 package rank.game.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
+import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -10,16 +11,15 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.multipart.MultipartFile;
 import rank.game.dto.BoardDTO;
-import rank.game.dto.MemberDTO;
 import rank.game.entity.BoardEntity;
 import rank.game.service.BoardService;
 import rank.game.service.MemberService;
 
-import java.io.File;
-import java.util.UUID;
-
+import java.net.MalformedURLException;
+import java.util.List;
 
 @Controller
 @RequestMapping("/board")
@@ -58,6 +58,10 @@ public class BoardController {
         int startPage = Math.max(nowPage - 2, 1);
         int endPage = Math.min(nowPage + 3, pageResult.getTotalPages());
 
+        // 인기글 목록 가져오기
+        List<BoardDTO> popularPosts = boardService.getPopularPosts();
+        model.addAttribute("popularPosts", popularPosts);
+
         model.addAttribute("list", pageResult);
         model.addAttribute("nowPage", nowPage);
         model.addAttribute("startPage", startPage);
@@ -68,23 +72,17 @@ public class BoardController {
         return "html/board/boardList";
     }
 
-
     // 게시글 쓰기 페이지 이동
     @GetMapping("/write")
     public String createForm(Model model, HttpSession session) {
-
-        // 로그인 세션 추가
         boolean isLogin = session.getAttribute("loginEmail") != null;
 
-
-        // 로그인 성공 시
-        if(session.getAttribute("loginEmail") != null) {
+        if (isLogin) {
             model.addAttribute("isLogin", isLogin);
             model.addAttribute("nickname", session.getAttribute("nickname"));
             model.addAttribute("loginEmail", session.getAttribute("loginEmail"));
             return "html/board/boardWrite";
         } else {
-            // 로그인 실패
             model.addAttribute("isLogin", false);
             model.addAttribute("message", "로그인 이후 게시글 작성을 이용하실 수 있습니다.");
             model.addAttribute("searchUrl", "/board");
@@ -94,9 +92,7 @@ public class BoardController {
 
     // 글작성 처리
     @PostMapping("/writepro")
-    public String boardWritePro(BoardEntity board, Model model, MultipartFile file, HttpSession session) throws Exception {
-
-        // 로그인 세션 추가
+    public String boardWritePro(BoardEntity board, Model model, MultipartFile file, HttpSession session) {
         boolean isLogin = session.getAttribute("loginEmail") != null;
         model.addAttribute("isLogin", isLogin);
 
@@ -105,18 +101,27 @@ public class BoardController {
         board.setMemberEmail(email);
         board.setNickname(nickname);
 
-        if (file != null && !file.isEmpty()) {
-            System.out.println("Controller filename: " + file.getOriginalFilename());
-        } else {
-            System.out.println("No file uploaded");
+        try {
+            if (file != null && !file.isEmpty()) {
+                System.out.println("Controller filename: " + file.getOriginalFilename());
+            } else {
+                System.out.println("No file uploaded");
+            }
+
+            boardService.boardWrite(board, file);
+
+            model.addAttribute("message", "글 작성이 완료되었습니다.");
+        } catch (MaxUploadSizeExceededException e) {
+            model.addAttribute("message", "파일 크기가 너무 큽니다. 최대 업로드 크기를 확인해주세요.");
+        } catch (Exception e) {
+            model.addAttribute("message", "글 작성 중 오류가 발생했습니다.");
+            e.printStackTrace();
         }
 
-        boardService.boardWrite(board, file);
-        model.addAttribute("message", "글 작성이 완료되었습니다.");
         model.addAttribute("searchUrl", "/board");
-
-        return "html/message"; // 또는 필요한 페이지로 리다이렉트
+        return "html/message";
     }
+
 
     // 특정 게시글 불러오기
     @GetMapping("/view/{id}")
@@ -129,7 +134,7 @@ public class BoardController {
 
         if (board == null) {
             model.addAttribute("message", "해당 게시글을 찾을 수 없습니다.");
-            return "redirect:/board/list";  // 게시글 목록 페이지로 리다이렉트
+            return "redirect:/board/list";
         }
 
         // 로그인 이메일을 세션에서 가져오기
@@ -156,6 +161,10 @@ public class BoardController {
         model.addAttribute("searchKeyword", searchKeyword);
         model.addAttribute("page", page);
 
+        // 이미지 파일 경로 추가
+        model.addAttribute("imagePath", board.getFilepath());
+
+        System.out.println("업로드한 파일의 이름은 " + board.getFilepath());
 
         // 이전글과 다음글 정보 추가
         model.addAttribute("previousPost", previousPost);
@@ -166,6 +175,7 @@ public class BoardController {
 
         return "html/board/boardView";
     }
+
 
     // 게시글 삭제
     @GetMapping("/delete/{id}")
@@ -225,18 +235,10 @@ public class BoardController {
 
             // 파일 처리
             if (file != null && !file.isEmpty()) {
-                String projectPath = System.getProperty("user.dir") + "\\src\\main\\resources\\static\\files";
-                UUID uuid = UUID.randomUUID();
-                String fileName = uuid.toString() + "_" + file.getOriginalFilename();
-                File saveFile = new File(projectPath, fileName);
-                file.transferTo(saveFile);
-
-                boardTemp.setFilename(fileName);
-                boardTemp.setFilepath("/files/" + fileName);
+                boardService.updateBoard(boardTemp, file);
+            } else {
+                boardService.updateBoard(boardTemp, null);
             }
-
-            // 게시글 업데이트
-            boardService.updateBoard(boardTemp);
 
             model.addAttribute("message", "글 수정이 완료되었습니다.");
             model.addAttribute("searchUrl", "/board");

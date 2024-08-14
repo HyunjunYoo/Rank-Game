@@ -6,8 +6,9 @@ file:
 
 spring:
   mvc:
-    static-path-pattern: /uploads/**
-
+    static-path-pattern:
+      - /uploads/**
+      - /webapp/**
 
   # DataSource Setting
   datasource:

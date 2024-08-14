@@ -146,6 +146,10 @@
 
 		<div class="boardView-content-container">
 			<p class="boardView-content" th:text="${board.content}">내용이 들어갈 부분입니다.</p>
+			<div th:if="${imagePath != null}">
+				<img th:src="${imagePath}" alt="Uploaded Image" />
+			</div>
+
 		</div>
 
 		<div class="boardView-footer">

@@ -39,6 +39,8 @@ public class ProfileService {
 
         profile.setFileName(fileName);
         profile.setFilePath("/uploads/" + fileName);
+        System.out.println("프로필 저장 이름 " + profile.getFilePath());
+
         profileRepository.save(profile);
 
         return profile.getFilePath();

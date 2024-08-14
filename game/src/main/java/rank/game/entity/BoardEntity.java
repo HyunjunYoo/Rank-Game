@@ -76,6 +76,8 @@ public class BoardEntity {
         boardEntity.setDeleted(boardDTO.isDeleted());  // deleted 필드 추가+
         boardEntity.setLikeCount(boardDTO.getLikeCount());
         boardEntity.setDislikeCount(boardDTO.getDislikeCount());
+        boardEntity.setFilepath(boardDTO.getFilepath());
+        boardEntity.setFilename(boardDTO.getFilename());
         return boardEntity;
     }
 }

@@ -119,14 +119,35 @@
 
 	<!-- boardList section -->
 	<section class="boardList-section">
-		<div class="boardList-info">
-<!--			<h2><a href="/board">자유게시판</a></h2>-->
-			<hr class="boardView-separator1">
-		</div>
-
 		<div class="boardList-container">
 			<div class="boardList">
+				<!-- 인기글 섹션 -->
+				<section class="boardList-popul	ar-section">
+					<h2>인기글</h2>
+					<hr class="boardView-separator1">
+					<ul class="boardList-ul">
+						<!-- 인기글 상위 3개만 출력 -->
+						<li th:each="board, iterStat : ${popularPosts}" th:if="${iterStat.index < 3}" class="boardList-content">
+							<a th:href="@{/board/view/{id}(id=${board.id}, searchKeyword=${searchKeyword}, page=${nowPage})}">
+								<div class="boardList-inner-content">
+									<h3 th:text="${board.title}" class="boardList-title"></h3>
+									<p class="boardList-meta">
+										👤<span th:text="${board.nickname}" class="boardList-nickname"></span>&nbsp;
+										🕘<span th:text="${#temporals.format(board.createdAt, 'MM.dd')}" class="boardList-date"></span>&nbsp;
+										👁‍🗨<span th:text="${board.viewCount}" class="boardList-viewCount">0</span>&nbsp;
+										❤<span th:text="${board.likeCount}" class="boardView-likeCount">0</span>
+									</p>
+								</div>
+							</a>
+							<hr class="boardView-separator">
+						</li>
+					</ul>
+				</section>
+
+				<!-- 최신글 섹션 -->
 				<section class="boardList-latest-section">
+					<h2>최신글</h2>
+					<hr class="boardView-separator1">
 					<ul class="boardList-ul">
 						<li th:each="board : ${list}" class="boardList-content">
 							<a th:href="@{/board/view/{id}(id=${board.id}, searchKeyword=${searchKeyword}, page=${nowPage})}">
@@ -146,6 +167,29 @@
 				</section>
 			</div>
 		</div>
+
+		<!--		<div class="boardList-container">-->
+<!--			<div class="boardList">-->
+<!--				<section class="boardList-latest-section">-->
+<!--					<ul class="boardList-ul">-->
+<!--						<li th:each="board : ${list}" class="boardList-content">-->
+<!--							<a th:href="@{/board/view/{id}(id=${board.id}, searchKeyword=${searchKeyword}, page=${nowPage})}">-->
+<!--								<div class="boardList-inner-content">-->
+<!--									<h3 th:text="${board.title}" class="boardList-title"></h3>-->
+<!--									<p class="boardList-meta">-->
+<!--										👤<span th:text="${board.nickname}" class="boardList-nickname"></span>&nbsp;-->
+<!--										🕘<span th:text="${#temporals.format(board.createdAt, 'MM.dd')}" class="boardList-date"></span>&nbsp;-->
+<!--										👁‍🗨<span th:text="${board.viewCount}" class="boardList-viewCount">0</span>&nbsp;-->
+<!--										❤<span th:text="${board.likeCount}" class="boardView-likeCount">0</span>-->
+<!--									</p>-->
+<!--								</div>-->
+<!--							</a>-->
+<!--							<hr class="boardView-separator">-->
+<!--						</li>-->
+<!--					</ul>-->
+<!--				</section>-->
+<!--			</div>-->
+<!--		</div>-->
 
 		<!-- Pagination -->
 		<div class="boardList-pagination">

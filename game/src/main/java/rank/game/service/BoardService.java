@@ -15,37 +15,54 @@ import rank.game.repository.CommentRepository;
 import java.io.File;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class BoardService {
 
-    @Autowired // Autowired를 사용하면 BoardApplication의 @Bean이 자동적으로 읽어준다.
+    @Autowired
     private BoardRepository boardRepository;
+
     @Autowired
     private CommentRepository commentRepository;
 
     // 게시글 저장
     public void boardWrite(BoardEntity board, MultipartFile file) throws Exception {
         if (file != null && !file.isEmpty()) {
-            String projectPath = System.getProperty("user.dir") + "\\src\\main\\resources\\static\\files";
-            UUID uuid = UUID.randomUUID();
-            String fileName = uuid.toString() + "_" + file.getOriginalFilename();
-            File saveFile = new File(projectPath, fileName);
-            file.transferTo(saveFile);
-
-            board.setFilename(fileName);
-            board.setFilepath("/files/" + fileName);
+            String[] fileDetails = saveFile(file);
+            board.setFilename(fileDetails[0]);
+            board.setFilepath(fileDetails[1]);
         }
 
         boardRepository.save(board); // 새 게시글 저장
     }
 
+    // 파일 저장 로직을 별도의 메서드로 분리
+    private String[] saveFile(MultipartFile file) throws Exception {
+        String projectPath = System.getProperty("user.dir") + "\\src\\main\\resources\\static\\uploads";
+        UUID uuid = UUID.randomUUID();
+        String fileName = uuid + "_" + file.getOriginalFilename();
+        File saveFile = new File(projectPath, fileName);
+
+        // 디렉터리가 존재하지 않으면 생성
+        if (!saveFile.exists()) {
+            saveFile.mkdirs();
+        }
+
+        file.transferTo(saveFile);
+
+        return new String[]{fileName, "/uploads/" + fileName};
+    }
 
     // 게시글 리스트 처리
-    public Page<BoardEntity> boardList(Pageable pageable) {return boardRepository.findAll(pageable);}
+    public Page<BoardEntity> boardList(Pageable pageable) {
+        return boardRepository.findAll(pageable);
+    }
 
     // 게시글 검색 처리
-    public Page<BoardEntity> boardSearchList(String searchKeyword, Pageable pageable) {return boardRepository.findByTitleContaining(searchKeyword, pageable);}
+    public Page<BoardEntity> boardSearchList(String searchKeyword, Pageable pageable) {
+        return boardRepository.findByTitleContaining(searchKeyword, pageable);
+    }
 
     // 특정 게시글 불러오기
     public BoardDTO boardView(Long id) {
@@ -65,7 +82,12 @@ public class BoardService {
     }
 
     // 게시글 업데이트
-    public void updateBoard(BoardEntity board) {
+    public void updateBoard(BoardEntity board, MultipartFile file) throws Exception {
+        if (file != null && !file.isEmpty()) {
+            String[] fileDetails = saveFile(file);
+            board.setFilename(fileDetails[0]);
+            board.setFilepath(fileDetails[1]);
+        }
         boardRepository.save(board); // 기존 게시글 업데이트
     }
 
@@ -92,5 +114,14 @@ public class BoardService {
         BoardEntity board = boardRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid board ID"));
         board.setViewCount(board.getViewCount() + 1);
         boardRepository.save(board);
+    }
+
+    public List<BoardDTO> getPopularPosts() {
+        // 인기글을 선정하는 로직
+        List<BoardEntity> popularPosts = boardRepository.findPopularPosts();
+
+        return popularPosts.stream()
+                .map(BoardDTO::fromEntity)
+                .collect(Collectors.toList());
     }
 }

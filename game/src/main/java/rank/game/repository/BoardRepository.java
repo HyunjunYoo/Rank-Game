@@ -7,11 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import rank.game.entity.BoardEntity;
-import rank.game.entity.CommentEntity;
 
 import java.util.List;
-import java.util.Optional;
-
 
 @Repository
 public interface BoardRepository extends JpaRepository<BoardEntity, Long> {
@@ -25,5 +22,7 @@ public interface BoardRepository extends JpaRepository<BoardEntity, Long> {
     @Query("SELECT b FROM BoardEntity b WHERE b.createdAt > (SELECT b2.createdAt FROM BoardEntity b2 WHERE b2.id = :id) ORDER BY b.createdAt ASC")
     List<BoardEntity> findNextPosts(@Param("id") Long id, Pageable pageable);
 
-
+    // 인기글 처리
+    @Query("SELECT b FROM BoardEntity b WHERE b.deleted = false ORDER BY (b.viewCount * 0.4 + b.likeCount * 0.4 - b.dislikeCount * 0.2) DESC")
+    List<BoardEntity> findPopularPosts();
 }

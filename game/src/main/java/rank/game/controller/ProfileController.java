@@ -86,6 +86,7 @@ public class ProfileController {
                 String profileImageUrl = profileOpt.map(ProfileEntity::getFilePath)
                         .orElse("https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FdAqmkb%2FbtsHBpCK2sR%2F5f2REVwRSQkiJ3qWkAcZkK%2Fimg.png");
 
+                System.out.println("프로필 이미지 경로는 " + profileImageUrl);
                 model.addAttribute("memberEmail", memberEmail);
                 model.addAttribute("memberName", member.getMemberName());
                 model.addAttribute("memberNickname", member.getNickname());
