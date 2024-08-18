@@ -36,7 +36,7 @@ public class CyphersApiService {
                 playerDTO.setPlayerId(getJsonValue(playerData, "playerId"));
                 playerDTO.setNickname(getJsonValue(playerData, "nickname"));
 
-                // 추가 데이터 가져오기
+                // Additional data
                 playerDTO = getPlayerDetails(playerDTO.getPlayerId(), playerDTO);
             }
             return playerDTO;
@@ -67,8 +67,8 @@ public class CyphersApiService {
         }
     }
 
-    public List<CyphersMatchDTO> getMatchDetails(String playerId) {
-        String url = BASE_URL + "/players/" + playerId + "/matches?gameTypeId=rating&limit=10&apikey=" + API_KEY;
+    public List<CyphersMatchDTO> getMatchDetails(String playerId, String gameType) {
+        String url = BASE_URL + "/players/" + playerId + "/matches?gameTypeId=" + gameType + "&limit=10&apikey=" + API_KEY;
         try {
             ResponseEntity<JsonNode> responseEntity = restTemplate.getForEntity(url, JsonNode.class);
             JsonNode response = responseEntity.getBody();
@@ -80,20 +80,7 @@ public class CyphersApiService {
                     matchDetails.add(extractMatchDetail(matchNode));
                 }
             } else {
-                logger.warning("No rating matches found for playerId: " + playerId);
-                // Check for normal matches if no rating matches found
-                url = BASE_URL + "/players/" + playerId + "/matches?gameTypeId=normal&limit=10&apikey=" + API_KEY;
-                responseEntity = restTemplate.getForEntity(url, JsonNode.class);
-                response = responseEntity.getBody();
-                logger.info("Normal Match Details Response: " + response);
-
-                if (response != null && response.has("matches") && response.get("matches").has("rows") && response.get("matches").get("rows").isArray() && response.get("matches").get("rows").size() > 0) {
-                    for (JsonNode matchNode : response.get("matches").get("rows")) {
-                        matchDetails.add(extractMatchDetail(matchNode));
-                    }
-                } else {
-                    logger.warning("No normal matches found for playerId: " + playerId);
-                }
+                logger.warning("No matches found for playerId: " + playerId);
             }
             return matchDetails;
         } catch (HttpClientErrorException e) {
@@ -124,7 +111,7 @@ public class CyphersApiService {
         double kda = (deaths == 0) ? (kills + assists) : (kills + assists) / (double) deaths;
         matchDetail.setKda(String.format("%.2f", kda));
         matchDetail.setKills(String.valueOf(kills));
-        matchDetail.setDeaths(String.valueOf(deaths)); // 데스 수 설정
+        matchDetail.setDeaths(String.valueOf(deaths));
         matchDetail.setAssists(String.valueOf(assists));
 
         return matchDetail;

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.multipart.MultipartFile;
 import rank.game.dto.BoardDTO;
+import rank.game.dto.MemberDTO;
 import rank.game.entity.BoardEntity;
 import rank.game.service.BoardService;
 import rank.game.service.MemberService;
@@ -69,6 +70,16 @@ public class BoardController {
         model.addAttribute("totalPages", pageResult.getTotalPages());
         model.addAttribute("searchKeyword", searchKeyword);
 
+        // 세션에서 로그인된 유저의 MemberDTO 가져오기
+        if (session.getAttribute("loginMember") != null) {
+            MemberDTO loginMember = (MemberDTO) session.getAttribute("loginMember");
+            model.addAttribute("isAdmin", loginMember.isAdmin());
+            model.addAttribute("isManager", loginMember.isManager());
+        } else {
+            model.addAttribute("isAdmin", false);  // 기본 값 설정
+            model.addAttribute("isManager", false);  // 기본 값 설정
+        }
+
         return "html/board/boardList";
     }
 
@@ -76,6 +87,16 @@ public class BoardController {
     @GetMapping("/write")
     public String createForm(Model model, HttpSession session) {
         boolean isLogin = session.getAttribute("loginEmail") != null;
+
+        // 세션에서 로그인된 유저의 MemberDTO 가져오기
+        if (session.getAttribute("loginMember") != null) {
+            MemberDTO loginMember = (MemberDTO) session.getAttribute("loginMember");
+            model.addAttribute("isAdmin", loginMember.isAdmin());
+            model.addAttribute("isManager", loginMember.isManager());
+        } else {
+            model.addAttribute("isAdmin", false);  // 기본 값 설정
+            model.addAttribute("isManager", false);  // 기본 값 설정
+        }
 
         if (isLogin) {
             model.addAttribute("isLogin", isLogin);
@@ -88,6 +109,7 @@ public class BoardController {
             model.addAttribute("searchUrl", "/board");
             return "html/message";
         }
+
     }
 
     // 글작성 처리
@@ -100,6 +122,16 @@ public class BoardController {
         String nickname = (String) session.getAttribute("nickname");
         board.setMemberEmail(email);
         board.setNickname(nickname);
+
+        // 세션에서 로그인된 유저의 MemberDTO 가져오기
+        if (session.getAttribute("loginMember") != null) {
+            MemberDTO loginMember = (MemberDTO) session.getAttribute("loginMember");
+            model.addAttribute("isAdmin", loginMember.isAdmin());
+            model.addAttribute("isManager", loginMember.isManager());
+        } else {
+            model.addAttribute("isAdmin", false);  // 기본 값 설정
+            model.addAttribute("isManager", false);  // 기본 값 설정
+        }
 
         try {
             if (file != null && !file.isEmpty()) {
@@ -135,6 +167,16 @@ public class BoardController {
         if (board == null) {
             model.addAttribute("message", "해당 게시글을 찾을 수 없습니다.");
             return "redirect:/board/list";
+        }
+
+        // 세션에서 로그인된 유저의 MemberDTO 가져오기
+        if (session.getAttribute("loginMember") != null) {
+            MemberDTO loginMember = (MemberDTO) session.getAttribute("loginMember");
+            model.addAttribute("isAdmin", loginMember.isAdmin());
+            model.addAttribute("isManager", loginMember.isManager());
+        } else {
+            model.addAttribute("isAdmin", false);  // 기본 값 설정
+            model.addAttribute("isManager", false);  // 기본 값 설정
         }
 
         // 로그인 이메일을 세션에서 가져오기
@@ -185,8 +227,18 @@ public class BoardController {
 
         BoardEntity boardTemp = BoardEntity.toBoardEntity(boardService.boardView(id));
 
+        // 세션에서 로그인된 유저의 MemberDTO 가져오기
+        if (session.getAttribute("loginMember") != null) {
+            MemberDTO loginMember = (MemberDTO) session.getAttribute("loginMember");
+            model.addAttribute("isAdmin", loginMember.isAdmin());
+            model.addAttribute("isManager", loginMember.isManager());
+        } else {
+            model.addAttribute("isAdmin", false);  // 기본 값 설정
+            model.addAttribute("isManager", false);  // 기본 값 설정
+        }
+
         // 삭제 권한 확인
-        if (isLogin && boardTemp.getMemberEmail().equals(session.getAttribute("loginEmail").toString())) {
+        if ((isLogin && boardTemp.getMemberEmail().equals(session.getAttribute("loginEmail").toString()) || session.getAttribute("loginMember") != null)) {
             boardService.boardDelete(id);
             model.addAttribute("message", "글 삭제가 완료되었습니다.");
             model.addAttribute("searchUrl", "/board");
@@ -203,6 +255,16 @@ public class BoardController {
     public String boardModify(@PathVariable Long id, Model model, HttpSession session) {
         boolean isLogin = session.getAttribute("loginEmail") != null;
         model.addAttribute("isLogin", isLogin);
+
+        // 세션에서 로그인된 유저의 MemberDTO 가져오기
+        if (session.getAttribute("loginMember") != null) {
+            MemberDTO loginMember = (MemberDTO) session.getAttribute("loginMember");
+            model.addAttribute("isAdmin", loginMember.isAdmin());
+            model.addAttribute("isManager", loginMember.isManager());
+        } else {
+            model.addAttribute("isAdmin", false);  // 기본 값 설정
+            model.addAttribute("isManager", false);  // 기본 값 설정
+        }
 
         // 게시글 조회
         BoardEntity boardTemp = boardService.getBoardById(id);
@@ -223,6 +285,16 @@ public class BoardController {
     public String boardUpdate(@PathVariable Long id, BoardEntity board, Model model, MultipartFile file, HttpSession session) throws Exception {
         boolean isLogin = session.getAttribute("loginEmail") != null;
         model.addAttribute("isLogin", isLogin);
+
+        // 세션에서 로그인된 유저의 MemberDTO 가져오기
+        if (session.getAttribute("loginMember") != null) {
+            MemberDTO loginMember = (MemberDTO) session.getAttribute("loginMember");
+            model.addAttribute("isAdmin", loginMember.isAdmin());
+            model.addAttribute("isManager", loginMember.isManager());
+        } else {
+            model.addAttribute("isAdmin", false);  // 기본 값 설정
+            model.addAttribute("isManager", false);  // 기본 값 설정
+        }
 
         // 게시글 조회
         BoardEntity boardTemp = boardService.getBoardById(id);

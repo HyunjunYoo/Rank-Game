@@ -1,17 +1,19 @@
 package rank.game.controller;
 
-import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import rank.game.dto.CyphersMatchDTO;
 import rank.game.dto.CyphersPlayerDTO;
+import rank.game.dto.CyphersRecordDTO;
 import rank.game.service.CyphersApiService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Controller
@@ -26,35 +28,42 @@ public class CyphersController {
     }
 
     @GetMapping
-    public String cyphers(HttpSession session, Model model) {
-
-        // 로그인 세션 추가
-        boolean isLogin = session.getAttribute("loginEmail") != null;
-        model.addAttribute("isLogin", isLogin);
-
+    public String cyphers() {
+        // 기본 페이지를 반환
         return "html/cyphers";
     }
 
-    @PostMapping("/sorted-players")
-    public String getSortedPlayers(@RequestParam String playerName,
-                                   @RequestParam(defaultValue = "full") String wordType,
-                                   Model model, HttpSession session) {
+    @GetMapping("/player")
+    public String getPlayerInfo(@RequestParam("nickname") String nickname,
+                                @RequestParam("gameType") String gameType,
+                                Model model) {
         try {
-            CyphersPlayerDTO playerInfo = cyphersApiService.getPlayerInfo(playerName, wordType);
-            List<CyphersMatchDTO> matchDetails = cyphersApiService.getMatchDetails(playerInfo.getPlayerId());
+            // 플레이어 정보와 전적 가져오기
+            CyphersPlayerDTO playerDTO = cyphersApiService.getPlayerInfo(nickname, "match");
+            List<CyphersMatchDTO> matchDetails = cyphersApiService.getMatchDetails(playerDTO.getPlayerId(), gameType);
 
-            model.addAttribute("playerInfo", playerInfo);
+            log.info("Match Details: {}", matchDetails);  // 디버깅용 로그 추가
+
+            // 전적 정보 가공
+            List<CyphersRecordDTO> gameRecords = matchDetails.stream()
+                    .map(record -> new CyphersRecordDTO(
+                            record.getMatchId(),
+                            "WIN".equalsIgnoreCase(record.getResult()),
+                            record.getCharacterName(),
+                            record.getPlayTime()
+                            // 필요한 경우 추가적인 필드를 여기에 포함
+                    ))
+                    .collect(Collectors.toList());
+
+            playerDTO.setGameRecords(gameRecords);
+
+            // 모델에 데이터 추가
+            model.addAttribute("playerInfo", playerDTO);
             model.addAttribute("matchDetails", matchDetails);
-        } catch (HttpClientErrorException e) {
-            model.addAttribute("error", "플레이어 정보를 불러오는 중 오류가 발생했습니다: " + e.getMessage());
         } catch (Exception e) {
-            model.addAttribute("error", "플레이어 정보를 불러오는 중 오류가 발생했습니다: " + e.getMessage());
+            model.addAttribute("error", "Error fetching data: " + e.getMessage());
         }
-
-        // 로그인 세션 추가
-        boolean isLogin = session.getAttribute("loginEmail") != null;
-        model.addAttribute("isLogin", isLogin);
-
+        // 데이터와 함께 같은 페이지를 반환
         return "html/cyphers";
     }
 }

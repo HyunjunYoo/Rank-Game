@@ -2,10 +2,8 @@ package rank.game.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Data
@@ -15,8 +13,9 @@ public class GameHistory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "game_id", nullable = false)
-    private Long gameId;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "game_id", nullable = false)
+    private Game game;
 
     @Column(name = "game_name", nullable = false)
     private String gameName;

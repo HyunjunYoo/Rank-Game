@@ -56,9 +56,8 @@
 				<nav class="top-nav-area w-100">
 					<div class="user-panel">
 						<div class="auth" th:if="${isLogin}">
-							<a href="/mypage">마이페이지</a> /
+							<a href="/profile/mainMyPage">마이페이지</a> /
 							<a href="/member/logout">로그아웃</a>
-							<span th:if="${isAdmin != null and isAdmin}"><a href="/admin">관리자 페이지</a></span>
 						</div>
 						<div class="auth" th:if="${!isLogin}">
 							<a href="#" id="login-btn">로그인</a> / <a href="/member/signup">회원가입</a>
@@ -77,7 +76,36 @@
 							<button type="submit">로그인</button>
 						</form>
 						<button id="close-login-modal">닫기</button>
+						<button id="forgot-password-btn">비밀번호 찾기</button>
 					</div>
+
+					<div class="modal" id="forgot-password-modal" th:if="${!isLogin}">
+						<div class="modal-content" style="max-height: 70vh; overflow-y: auto;">
+							<h3>비밀번호 찾기</h3>
+							<form action="/member/resetPassword" method="POST" id="formId">
+								<div class="mb-3">
+									<label for="memberEmail">이메일</label>
+									<div class="d-flex justify-content-between">
+										<input type="email" name="memberEmail" id="memberEmail" placeholder="가입하신 이메일 주소" style="flex-grow: 1;">
+										<button type="button" id="emailCheckBtn" class="btn btn-outline-dark mb-3 btn-sm" style="margin-left: 10px;">전송</button>
+									</div>
+									<div class="form-text" id="emailCheckWarn"></div>
+								</div>
+								<div class="mb-3">
+									<label for="injeung">인증번호 입력</label>
+									<div class="d-flex justify-content-between">
+										<input type="hidden" id="injeungbunho">
+										<input type="text" id="injeung" style="flex-grow: 1;">
+									</div>
+									<div class="form-text" id="injeungCheckWarn"></div>
+								</div>
+								<button type="button" class="btn btn-dark mb-3" id="findPwdBtn" style="width: 100%;">확인</button>
+								<input type="hidden" id="randomPwd">
+							</form>
+							<button id="close-forgot-password-modal">닫기</button>
+						</div>
+					</div>
+
 					<!-- Menu -->
 					<ul class="main-menu primary-menu">
 						<li><a href="/">홈</a></li>
@@ -90,12 +118,29 @@
 						</li>
 						<li><a href="/review">투표 / 게임 랭킹</a>
 							<ul class="sub-menu">
-								<li><a href="/review">게임 랭킹</a>
+								<li><a href="/review">게임 랭킹</a></li>
 								<li><a href="/vote">투표</a></li>
 							</ul>
 						</li>
 						<li><a href="/board">자유게시판</a></li>
 						<li><a href="/notice">공지사항</a></li>
+						<!-- 관리자 페이지 메뉴 -->
+						<li th:if="${isAdmin}">
+							<a href="#">관리자 페이지</a>
+							<ul class="sub-menu">
+								<li><a href="/admin/member">회원관리</a></li>
+								<li><a href="/admin/notices">공지사항 관리</a></li>
+								<li><a href="/admin/posts">게시글 관리</a></li>
+							</ul>
+						</li>
+						<li th:if="${isManager}">
+							<a href="#">관리자 페이지</a>
+							<ul class="sub-menu">
+								<li><a href="/manager/members">회원관리</a></li>
+								<li><a href="/admin/notices">공지사항 관리</a></li>
+								<li><a href="/admin/posts">게시글 관리</a></li>
+							</ul>
+						</li>
 					</ul>
 				</nav>
 			</div>

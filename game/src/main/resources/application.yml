@@ -5,10 +5,25 @@ file:
   upload-dir: ./uploads/
 
 spring:
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: howl1265@gmail.com
+    password: rbhp fjpn fwmt nciy
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+        transport:
+          protocol: smtp
+
+  main:
+    allow-bean-definition-overriding: true
+
   mvc:
-    static-path-pattern:
-      - /uploads/**
-      - /webapp/**
+    static-path-pattern: /uploads/**
 
   # DataSource Setting
   datasource:

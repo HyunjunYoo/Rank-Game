@@ -10,7 +10,7 @@ public class CyphersMatchDTO {
     private String result;
     private String characterName;
     private String playTime;
-    private String characterId; // 캐릭터 이미지
+    private String characterId;
     private String level;
     private String kda;
     private String kills;

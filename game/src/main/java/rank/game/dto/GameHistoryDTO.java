@@ -12,23 +12,17 @@ public class GameHistoryDTO {
     private Integer gameVote;
     private Integer gameRank;
     private LocalDateTime voteTime;
-    private Integer ranking;
-    private Integer totalVotes;
+    private Integer rankChange;  // 순위 변동 필드 변경
 
-    // 기본 생성자
-    public GameHistoryDTO() {
-    }
+    public GameHistoryDTO() {}
 
-    // 모든 필드를 포함한 생성자
-    public GameHistoryDTO(Long id, Long gameId, String gameName, Integer gameVote, Integer gameRank, LocalDateTime voteTime, Integer ranking, Integer totalVotes) {
+    public GameHistoryDTO(Long id, Long gameId, String gameName, Integer gameVote, Integer gameRank, LocalDateTime voteTime, Integer rankChange) {
         this.id = id;
         this.gameId = gameId;
         this.gameName = gameName;
         this.gameVote = gameVote;
         this.gameRank = gameRank;
         this.voteTime = voteTime;
-        this.ranking = ranking;
-        this.totalVotes = totalVotes;
+        this.rankChange = rankChange;
     }
-
 }

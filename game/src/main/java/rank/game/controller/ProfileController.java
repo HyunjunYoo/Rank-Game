@@ -3,6 +3,8 @@ package rank.game.controller;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +19,11 @@ import rank.game.service.MemberService;
 import rank.game.service.ProfileService;
 import rank.game.service.VoteService;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
@@ -86,7 +93,6 @@ public class ProfileController {
                 String profileImageUrl = profileOpt.map(ProfileEntity::getFilePath)
                         .orElse("https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FdAqmkb%2FbtsHBpCK2sR%2F5f2REVwRSQkiJ3qWkAcZkK%2Fimg.png");
 
-                System.out.println("프로필 이미지 경로는 " + profileImageUrl);
                 model.addAttribute("memberEmail", memberEmail);
                 model.addAttribute("memberName", member.getMemberName());
                 model.addAttribute("memberNickname", member.getNickname());

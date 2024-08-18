@@ -1,13 +1,16 @@
 package rank.game.entity;
 
 import jakarta.persistence.*;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
+import lombok.ToString;
 
 @Entity
 @Getter
 @Setter
+@ToString
+@EqualsAndHashCode
 @Table(name = "games")
 public class Game {
     @Id
@@ -17,16 +20,23 @@ public class Game {
     @Column(name = "game_name", nullable = false)
     private String gameName;
 
-    @Column(name = "game_vote", nullable = false)
-    @ColumnDefault("0")
-    private int gameVote = 0;
+    @Column(name = "game_vote")
+    private Integer gameVote;
 
-    @Column(name = "game_rank", nullable = false)
-    @ColumnDefault("0")
-    private Integer gameRank = 0;
-
+    @Column(name = "game_rank")
+    private Integer gameRank;
 
     @Column(name = "game_image", nullable = false)
     private String imageUrl;
 
+    // Default constructor for JPA
+    public Game() {}
+
+    // Parameterized constructor for convenience
+    public Game(String gameName, Integer gameVote, Integer gameRank, String imageUrl) {
+        this.gameName = gameName;
+        this.gameVote = gameVote;
+        this.gameRank = gameRank;
+        this.imageUrl = imageUrl;
+    }
 }

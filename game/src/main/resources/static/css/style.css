@@ -1412,7 +1412,7 @@ ol {
 ---------------------*/
 
 .review-item {
-	margin-bottom: 87px;
+	/*margin-bottom: 87px;*/
 }
 
 .review-content {
@@ -1833,6 +1833,7 @@ ol {
 	font-weight: bold;
 	margin: 0 10px;
 }
+
 .modal {
 	display: none;
 	position: fixed;
@@ -1844,21 +1845,27 @@ ol {
 	border-radius: 10px;
 	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 	width: 300px;
-	height: 430px;
+	height: 500px;
+	max-height: 80vh; /* 최대 높이를 설정하여 스크롤 가능하게 합니다 */
+	overflow-y: auto; /* 수직 스크롤을 추가합니다 */
 	z-index: 1001;
 }
+
 .modal.active {
 	display: block;
 }
+
 .modal h2 {
 	margin: 0 0 20px 0;
 	color: #4b0082;
 }
+
 .modal label {
 	display: block;
 	margin: 10px 0 5px;
 	color: #4b0082;
 }
+
 .modal input {
 	width: 100%;
 	padding: 10px;
@@ -1866,6 +1873,7 @@ ol {
 	border: 1px solid #ccc;
 	border-radius: 5px;
 }
+
 .modal button {
 	width: 100%;
 	padding: 10px;
@@ -1877,9 +1885,11 @@ ol {
 	font-size: 16px;
 	margin-top: 10px;
 }
+
 .modal button:hover {
 	background-color: #36005a;
 }
+
 .modal-overlay {
 	display: none;
 	position: fixed;
@@ -1890,8 +1900,15 @@ ol {
 	background-color: rgba(0, 0, 0, 0.5);
 	z-index: 1000;
 }
+
 .modal-overlay.active {
 	display: block;
+}
+
+.modal-content {
+	max-height: 70vh; /* 모달의 최대 높이를 설정 */
+	overflow-y: auto; /* 수직 스크롤을 추가 */
+	padding-right: 10px; /* 스크롤바 공간 확보를 위해 패딩 추가 */
 }
 
 /* 회원가입 */
@@ -1905,6 +1922,7 @@ ol {
 	left: 50%;
 	transform: translate(-50%);
 	width: 460px;
+
 }
 
 .newsletter-section .container {
@@ -2793,22 +2811,6 @@ ol {
 	margin: 0 auto;
 }
 
-/* boardList-section 내에서만 스타일 초기화 적용 */
-/*.boardList-section div,*/
-/*.boardList-section h2,*/
-/*.boardList-section h3,*/
-/*.boardList-section p,*/
-/*.boardList-section span {*/
-/*	margin: 0;*/
-/*	padding: 0;*/
-/*	border: none;*/
-/*	background: none;*/
-/*	font: inherit;*/
-/*	color: inherit;*/
-/*	box-shadow: none;*/
-/*	outline: none;*/
-/*}*/
-
 /* 섹션 내 제목 스타일 */
 .boardList-section h2 {
 	font-size: 48px;
@@ -2818,58 +2820,6 @@ ol {
 	text-transform: uppercase;
 	margin-bottom: 40px;
 }
-
-/*!* 컨테이너 스타일 *!*/
-/*.boardList-div {*/
-/*	display: flex;*/
-/*	flex-direction: column;*/
-/*	align-items: center;*/
-/*	width: 60%;*/
-/*	margin: 0 auto;*/
-/*}*/
-
-/*.boardList-div-top {*/
-/*	width: 100%;*/
-/*	display: flex;*/
-/*	margin-bottom: 20px;*/
-/*}*/
-
-/*.boardList-div-mid {*/
-/*	display: flex;*/
-/*	flex-direction: column;*/
-/*	width: 100%;*/
-/*}*/
-
-/*!* 게시글 항목 스타일 *!*/
-/*.boardList-item {*/
-/*	width: 100%;*/
-/*	max-width: 600px;*/
-/*	background-color: #50366D;*/
-/*	border-radius: 5px;*/
-/*	margin-bottom: 20px;*/
-/*	padding: 15px;*/
-/*	box-sizing: border-box;*/
-/*}*/
-
-/*.boardList-item-title {*/
-/*	font-size: 24px;*/
-/*	color: #FFFFFF;*/
-/*	margin-bottom: 10px;*/
-/*}*/
-
-/*.boardList-item-content {*/
-/*	font-size: 16px;*/
-/*	color: #DADADA;*/
-/*	margin-bottom: 10px;*/
-/*}*/
-
-/*.boardList-item-date {*/
-/*	font-size: 14px;*/
-/*	color: #B0B0B0;*/
-/*}*/
-
-
-
 
 /* --------------------
   boardWrite section
@@ -3681,6 +3631,265 @@ ol {
 
 
 
+/* 전적검색 */
+/* style.css */
+.Game {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	background: #1e2027;
+	border-radius: 8px;
+	margin-bottom: 12px;
+	padding: 16px;
+	box-sizing: border-box;
+}
+
+.Game--Result-WIN .deco {
+	background: #5383e8;
+}
+
+.Game--Result-LOSS .deco {
+	background: #e85353;
+}
+
+.deco {
+	width: 8px;
+	height: 100%;
+	position: absolute;
+	left: 0;
+	top: 0;
+	border-top-left-radius: 8px;
+	border-bottom-left-radius: 8px;
+}
+
+.contents {
+	display: flex;
+	flex-direction: column;
+	position: relative;
+	padding-left: 8px;
+}
+
+.inner {
+	display: flex;
+	flex-direction: column;
+}
+
+.css-1mk3mai.ezr8g462 {
+	display: flex;
+	justify-content: space-between;
+}
+
+.head-group {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.game-type, .result, .length, .avg-tier, .time-stamp div {
+	color: #fff;
+	font-size: 14px;
+	line-height: 20px;
+}
+
+.divider {
+	height: 1px;
+	background: rgba(255, 255, 255, 0.1);
+	margin: 8px 0;
+}
+
+.css-e10jb3.ezr8g463 {
+	display: flex;
+	justify-content: space-between;
+	padding: 16px 0;
+}
+
+.main {
+	display: flex;
+}
+
+.info {
+	display: flex;
+	align-items: center;
+}
+
+.champion {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-decoration: none;
+	color: #fff;
+}
+
+.champion img {
+	border-radius: 50%;
+	margin-bottom: 4px;
+}
+
+.champion-level {
+	font-size: 12px;
+	background: rgba(255, 255, 255, 0.2);
+	padding: 2px 6px;
+	border-radius: 4px;
+}
+
+.GameLoadout.css-k2lqdb.eva4ivy0 {
+	display: flex;
+	flex-direction: column;
+	margin-left: 8px;
+}
+
+.loadout-group {
+	display: flex;
+	margin-bottom: 4px;
+}
+
+.spell, .rune {
+	margin-right: 4px;
+}
+
+.spell img, .rune img {
+	border-radius: 4px;
+}
+
+.kda-stats {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin-left: 16px;
+}
+
+.kda {
+	font-size: 16px;
+	font-weight: bold;
+	color: #fff;
+}
+
+.kda-ratio {
+	font-size: 12px;
+	color: rgba(255, 255, 255, 0.6);
+}
+
+.game-stats {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin-left: 16px;
+}
+
+.p-kill, .ward, .cs, .avg-tier {
+	font-size: 12px;
+	color: rgba(255, 255, 255, 0.6);
+	margin-bottom: 4px;
+}
+
+.sub {
+	display: flex;
+	flex-direction: column;
+}
+
+.items {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.item {
+	margin-right: 4px;
+	margin-bottom: 4px;
+}
+
+.item img {
+	border-radius: 4px;
+}
+
+.trinket img {
+	border-radius: 50%;
+}
+
+.game-tags__scroll-container {
+	display: flex;
+	overflow-x: auto;
+	margin-top: 8px;
+}
+
+.game-tags {
+	display: flex;
+}
+
+.OPScoreBadge.css-1mkftr3.e10be1gk0 {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: rgba(83, 131, 232, 0.2);
+	border-radius: 4px;
+	padding: 2px 6px;
+	margin-right: 4px;
+	color: #5383e8;
+	font-size: 12px;
+}
+
+.actions {
+	display: flex;
+	justify-content: flex-end;
+}
+
+.btn-detail {
+	background: none;
+	border: none;
+	cursor: pointer;
+}
+
+.svg-icon.svg-icon--arrow-down.css-zmp1xi.exna8sm0 {
+	color: rgb(83, 131, 232);
+	width: 24px;
+	height: 24px;
+}
+
+.css-mt0u67.eour1kh0 {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.css-pp7uqb.eour1kh1 {
+	display: flex;
+	align-items: center;
+	margin-right: 8px;
+	margin-bottom: 8px;
+}
+
+.icon img {
+	border-radius: 50%;
+}
+
+.name {
+	margin-left: 4px;
+}
+
+.summoner-tooltip a {
+	text-decoration: none;
+	color: #5383e8;
+}
+
+.css-12ijbdy.e1swkqyq0 {
+	display: flex;
+	align-items: center;
+}
+
+.css-ao94tw.e1swkqyq1 {
+	font-size: 14px;
+}
+
+.record-container {
+	padding: 20px;
+	background-color: #2c2f36;
+	border-radius: 10px;
+	max-width: 800px;
+	margin: 20px auto;
+}
+
+.divider-line {
+	border-top: 1px solid white; /* 흰색 선 */
+	margin: 10px 0; /* 위아래 여백 조정 */
+}
 
 
 
@@ -3873,4 +4082,338 @@ ol {
 .load-more-posts i:hover, .load-more-votes i:hover {
 	color: #3d1751;
 	transform: scale(1.2);
+}
+
+/* 회원관리 admin*/
+#membercontroll-search, #membercontroll-search-button {
+	padding: 8px;
+	border-radius: 5px;
+	border: 1px solid #ddd;
+	background-color: #643d7c; /* 배경색 */
+	color: white; /* 글씨 색상 */
+}
+
+#membercontroll-search {
+	flex-grow: 1; /* 입력 필드가 가용 공간을 채우도록 함 */
+	margin-right: 10px; /* 버튼과의 간격 */
+}
+
+#membercontroll-search-button {
+	cursor: pointer; /* 버튼 위에 마우스를 올렸을 때 커서 모양 변경 */
+	background-color: #5a4e7c; /* 버튼 배경색을 약간 다르게 설정 */
+}
+/* Select 박스 공통 스타일 */
+.membercontroll-role-select, #membercontroll-category {
+	padding: 8px;
+	border-radius: 5px;
+	border: 1px solid #ddd;
+	background-color: #643d7c; /* 배경색 */
+	color: white; /* 글씨 색상 */
+}
+
+.membercontroll-section {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 20px;
+	background-color: #461753;
+	color: white;
+}
+
+.membercontroll-container {
+	width: 80%;
+	max-width: 1200px;
+	background-color: #4f366c;
+	padding: 20px;
+	border-radius: 10px;
+	box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+	margin-bottom: 20px;
+}
+
+.membercontroll-search-container {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 20px;
+}
+
+.membercontroll-search-container label,
+.membercontroll-search-container select,
+.membercontroll-search-container input,
+.membercontroll-search-container button {
+	margin-right: 10px;
+	color: white; /* 검색 컨테이너 요소들의 글씨 색상 */
+}
+
+.membercontroll-table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+.membercontroll-table th,
+.membercontroll-table td {
+	padding: 12px;
+	text-align: left;
+	border-bottom: 1px solid #ddd;
+	background-color: #643d7c; /* 테이블 헤더와 셀의 배경 색상 설정 */
+	color: white; /* 테이블 헤더와 셀의 텍스트 색상을 흰색으로 설정 */
+}
+
+.membercontroll-table tr:hover {
+	background-color: #643d7c; /* 마우스 호버 시 배경 색상 유지 */
+}
+
+.membercontroll-role-select {
+	padding: 8px;
+	border-radius: 5px;
+	border: 1px solid #ddd;
+	background-color: #643d7c; /* 드롭다운 메뉴의 배경 색상 설정 */
+	color: white;
+}
+#load-more-button {
+	background: none;
+	border: none;
+	cursor: pointer;
+	color: white;
+}
+
+
+/*
+	메인페이지
+*/
+.home-section {
+	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#501755+0,2d1854+100 */
+	background: #501755;
+	/* Old browsers */
+	/* FF3.6-15 */
+	background: -webkit-linear-gradient(45deg, #501755 0%, #2d1854 100%);
+	/* Chrome10-25,Safari5.1-6 */
+	background: -o-linear-gradient(45deg, #501755 0%, #2d1854 100%);
+	background: linear-gradient(45deg, #501755 0%, #2d1854 100%);
+	/* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#501755', endColorstr='#2d1854', GradientType=1);
+	/* IE6-9 fallback on horizontal gradient */
+	text-align: center; /* 버튼을 가운데 정렬하기 위해 추가 */
+}
+
+.home-container {
+	display: flex;
+	justify-content: space-between;
+	gap: 20px;
+}
+
+.home-board-container,
+.home-notice-container {
+	flex: 1; /* 두 요소의 너비를 동일하게 설정 */
+	min-width: 200px; /* 최소 너비 설정 */
+	width: 80%;
+}
+
+/* ------------------
+ 전날 대비 순위 변동 차트
+ ------------------*/
+
+.chart-bg {
+	background-color: #36005a; /* 보라색 */
+	padding: 20px 0
+}
+
+.rank-change-table {
+	width: 100%;
+	margin-top: 20px;
+}
+
+.rank-change-table th, .rank-change-table td {
+	text-align: center;
+	vertical-align: middle;
+}
+
+.rank-change-table th {
+	background-color: #000000;
+	color: #ffffff;
+}
+
+.rank-change-table td {
+	background-color: #000000;
+	color: #ffffff;
+}
+
+.rank-change-table tr:nth-child(even) td {
+	background-color: #000000;
+}
+
+
+/* ------------------
+	게임 월드컵 Page
+--------------------- */
+
+.game-pair {
+	display: flex;
+	justify-content: space-around;
+	margin-bottom: 20px;
+}
+
+.game {
+	text-align: center;
+}
+
+.game img {
+	width: 50%;
+	height: 50%;
+	object-fit: cover;
+}
+
+button {
+	padding: 10px 20px;
+	border: none;
+	background-color: #6a1b9a;
+	color: white;
+	cursor: pointer;
+}
+
+button:hover {
+	background-color: #5b1483;
+}
+
+.game-item {
+	text-align: center;
+	margin-bottom: 20px;
+}
+
+.game-item img {
+	width: auto;
+	height: auto;
+	max-width: 300px;
+	max-height: 300px;
+	margin-bottom: 10px;
+	object-fit: contain; /* 이미지 비율을 유지하며, 컨테이너에 맞게 조정 */
+}
+
+.vote-btn {
+	width: 100%;
+	background-color: #6a1b9a;
+	color: white;
+	border: none;
+	padding: 10px;
+	cursor: pointer;
+}
+
+.vote-btn:hover {
+	background-color: #5b1483;
+}
+
+.game-matchup {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-bottom: 20px;
+}
+
+.game {
+	flex: 1;
+	text-align: center;
+}
+
+.vs {
+	font-size: 24px;
+	font-weight: bold;
+	padding: 0 20px;
+	color: #ffffff;
+}
+
+.result-row {
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+	margin-bottom: 20px;
+}
+
+.game-result {
+	flex: 1;
+	text-align: center;
+}
+
+/* 우승한 게임 스타일 */
+.winner {
+	border: 2px solid #ffd700;
+	background-color: #333842;
+	position: relative;
+	padding: 10px;
+	border-radius: 10px;
+	box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+}
+
+.winner::after {
+	content: "🏆 우승!";
+	color: #ffd700;
+	font-size: 1rem;
+	position: absolute;
+	top: -10px;
+	right: -10px;
+	background-color: #444953;
+	padding: 5px 10px;
+	border-radius: 20px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.game-card {
+	background-color: #444953;
+	border-radius: 10px;
+	padding: 15px;
+	text-align: center;
+	margin-bottom: 20px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+	transition: transform 0.3s ease-in-out;
+}
+
+.game-card:hover {
+	transform: translateY(-10px);
+}
+
+.game-card img {
+	max-width: 80px;
+	margin-bottom: 10px;
+	border-radius: 50%;
+}
+
+.game-card h5 {
+	font-size: 1.1rem;
+	margin-bottom: 10px;
+	color: #ffffff;
+}
+
+.game-card .win-rate {
+	font-size: 0.9rem;
+	font-weight: bold;
+	color: #28a745;
+}
+
+.game-card .win-count {
+	font-size: 0.8rem;
+	color: #adb5bd;
+}
+
+@media (max-width: 768px) {
+	.game img {
+		width: 70%; /* 화면이 작아지면 이미지 크기를 조정 */
+		height: auto;
+	}
+
+	.vote-btn {
+		padding: 8px;
+		font-size: 14px;
+	}
+}
+
+@media (max-width: 480px) {
+	.game img {
+		width: 90%; /* 작은 화면에서는 더 큰 이미지 크기를 사용 */
+		height: auto;
+	}
+
+	.vote-btn {
+		padding: 6px;
+		font-size: 12px;
+	}
 }
